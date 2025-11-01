@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculator UI (HTML + CSS only)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .calculator {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 240px;
+    }
+    .display {
+      width: 100%;
+      height: 50px;
+      background: #eee;
+      text-align: right;
+      font-size: 24px;
+      line-height: 50px;
+      border-radius: 5px;
+      padding-right: 10px;
+      margin-bottom: 10px;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .buttons button {
+      height: 50px;
+      font-size: 18px;
+      border: none;
+      background: #e0e0e0;
+      border-radius: 5px;
+      cursor: not-allowed; /* Disabled since no JS */
+    }
+    .buttons button.operator {
+      background: #ffd966;
+    }
+    .buttons button.equal {
+      background: #a6e3a1;
+      grid-column: span 2;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display">0</div>
+    <div class="buttons">
+      <button>7</button>
+      <button>8</button>
+      <button>9</button>
+      <button class="operator">÷</button>
+      <button>4</button>
+      <button>5</button>
+      <button>6</button>
+      <button class="operator">×</button>
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+      <button class="operator">−</button>
+      <button>0</button>
+      <button>.</button>
+      <button class="equal">=</button>
+      <button class="operator">+</button>
+    </div>
+  </div>
+  <script>
+  const display = document.querySelector('.display');
+  const buttons = document.querySelectorAll('.buttons button');
+  let current = '';
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = btn.textContent;
+      if (val === '=') {
+        try {
+          current = eval(current.replace('÷', '/').replace('×', '*').replace('−', '-'));
+        } catch {
+          current = 'Error';
+        }
+      } else {
+        current += val;
+      }
+      display.textContent = current || '0';
+    });
+  });
+</script>
+
+</body>
+</html>
