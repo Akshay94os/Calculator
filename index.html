@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Calculator UI (HTML + CSS only)</title>
+  <title>Calculator UI</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,90 +11,117 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      margin: 0;
     }
     .calculator {
       background: #fff;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 240px;
+      width: 260px;
     }
     .display {
       width: 100%;
-      height: 50px;
+      height: 60px;
       background: #eee;
       text-align: right;
-      font-size: 24px;
-      line-height: 50px;
+      font-size: 28px;
+      line-height: 60px;
       border-radius: 5px;
-      padding-right: 10px;
-      margin-bottom: 10px;
+      padding-right: 15px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+      overflow: hidden;
     }
     .buttons {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
     }
-    .buttons button {
+    button {
       height: 50px;
       font-size: 18px;
       border: none;
       background: #e0e0e0;
       border-radius: 5px;
-      cursor: not-allowed; /* Disabled since no JS */
+      cursor: pointer;
+      transition: background 0.2s;
     }
-    .buttons button.operator {
+    button:hover {
+      background: #d0d0d0;
+    }
+    .operator {
       background: #ffd966;
     }
-    .buttons button.equal {
+    .del-btn {
+      background: #ff9999;
+      font-weight: bold;
+    }
+    .equal {
       background: #a6e3a1;
       grid-column: span 2;
     }
   </style>
 </head>
 <body>
+
   <div class="calculator">
     <div class="display">0</div>
     <div class="buttons">
+      <button class="del-btn">X</button>
+      <button class="operator">÷</button>
+      <button class="operator">×</button>
+      <button class="operator">−</button>
+
       <button>7</button>
       <button>8</button>
       <button>9</button>
-      <button class="operator">÷</button>
+      <button class="operator">+</button>
+
       <button>4</button>
       <button>5</button>
       <button>6</button>
-      <button class="operator">×</button>
+      <button>.</button>
+
       <button>1</button>
       <button>2</button>
       <button>3</button>
-      <button class="operator">−</button>
       <button>0</button>
-      <button>.</button>
+
       <button class="equal">=</button>
-      <button class="operator">+</button>
     </div>
   </div>
-  <script>
-  const display = document.querySelector('.display');
-  const buttons = document.querySelectorAll('.buttons button');
-  let current = '';
 
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const val = btn.textContent;
-      if (val === '=') {
-        try {
-          current = eval(current.replace('÷', '/').replace('×', '*').replace('−', '-'));
-        } catch {
-          current = 'Error';
+  <script>
+    const display = document.querySelector('.display');
+    const buttons = document.querySelectorAll('button');
+    let currentExpression = '';
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = btn.textContent;
+
+        if (val === 'X') {
+          // Clear everything
+          currentExpression = '';
+        } else if (val === '=') {
+          try {
+            // Replace visual operators with math symbols and solve
+            const result = eval(currentExpression.replace(/÷/g, '/').replace(/×/g, '*').replace(/−/g, '-'));
+            currentExpression = result.toString();
+          } catch {
+            currentExpression = 'Error';
+          }
+        } else {
+          // Prevent showing 'Error' if user starts typing again
+          if (currentExpression === 'Error') currentExpression = '';
+          currentExpression += val;
         }
-      } else {
-        current += val;
-      }
-      display.textContent = current || '0';
+
+        display.textContent = currentExpression || '0';
+      });
     });
-  });
-</script>
+  </script>
 
 </body>
 </html>
